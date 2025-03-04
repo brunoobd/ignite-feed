@@ -9,6 +9,7 @@ export const Post = ({
   author,
   content,
   publishedAt,
+  comments,
 }: Omit<PostProps, "id">) => {
   const { name, role, avatarUrl } = author;
   const publishedDateFormatted = format(
@@ -44,15 +45,13 @@ export const Post = ({
       </header>
 
       <div className={styles.content}>
-        {content.map((line, index) => {
-          const key = `${line}-${index}`;
-
-          if (line.type === "paragraph") {
-            return <p key={key}>{line.content}</p>;
-          } else if (line.type === "link") {
+        {content.map(({ type, content }) => {
+          if (type === "paragraph") {
+            return <p key={content}>{content}</p>;
+          } else if (type === "link") {
             return (
-              <p key={key}>
-                <a href="#">{line.content}</a>
+              <p key={content}>
+                <a href="#">{content}</a>
               </p>
             );
           }
@@ -70,9 +69,15 @@ export const Post = ({
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map(({ id, author, content, publishedAt, likes }) => (
+          <Comment
+            key={id}
+            author={author}
+            publishedAt={publishedAt}
+            content={content}
+            likes={likes}
+          />
+        ))}
       </div>
     </article>
   );

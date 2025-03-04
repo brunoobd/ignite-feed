@@ -24,6 +24,28 @@ function App() {
         { type: "link", content: "https://github.com/brunodev/meu-projeto" },
       ],
       publishedAt: new Date("2024-03-03T14:00:00"),
+      comments: [
+        {
+          id: "101",
+          author: {
+            name: "João Pereira",
+            avatarUrl: "https://randomuser.me/api/portraits/men/4.jpg",
+          },
+          publishedAt: new Date("2024-03-03T15:10:00"),
+          content: "Parabéns pelo projeto! Ficou incrível! 🚀",
+          likes: 3,
+        },
+        {
+          id: "102",
+          author: {
+            name: "Ana Souza",
+            avatarUrl: "https://randomuser.me/api/portraits/women/5.jpg",
+          },
+          publishedAt: new Date("2024-03-03T15:30:00"),
+          content: "Ótimo trabalho! Como você implementou a responsividade?",
+          likes: 5,
+        },
+      ],
     },
     {
       id: "2",
@@ -44,6 +66,18 @@ function App() {
         { type: "link", content: "https://dribbble.com/marianacosta" },
       ],
       publishedAt: new Date("2024-03-02T10:30:00"),
+      comments: [
+        {
+          id: "103",
+          author: {
+            name: "Lucas Almeida",
+            avatarUrl: "https://randomuser.me/api/portraits/men/6.jpg",
+          },
+          publishedAt: new Date("2024-03-02T12:00:00"),
+          content: "Muito bom! Vou dar uma olhada no código no GitHub. 😃",
+          likes: 2,
+        },
+      ],
     },
     {
       id: "3",
@@ -68,6 +102,19 @@ function App() {
         },
       ],
       publishedAt: new Date("2024-03-01T18:45:00"),
+      comments: [
+        {
+          id: "104",
+          author: {
+            name: "Fernanda Lima",
+
+            avatarUrl: "https://randomuser.me/api/portraits/women/7.jpg",
+          },
+          publishedAt: new Date("2024-03-01T19:00:00"),
+          content: "Esse projeto é open-source? Gostaria de contribuir!",
+          likes: 7,
+        },
+      ],
     },
   ];
 
@@ -78,9 +125,17 @@ function App() {
       <div className={styles.wrapper}>
         <Sidebar />
         <main>
-          {posts.map(({ author, content, publishedAt }: PostProps) => (
-            <Post author={author} content={content} publishedAt={publishedAt} />
-          ))}
+          {posts.map(
+            ({ id, author, content, publishedAt, comments }: PostProps) => (
+              <Post
+                key={id}
+                author={author}
+                content={content}
+                publishedAt={publishedAt}
+                comments={comments}
+              />
+            )
+          )}
         </main>
       </div>
     </>

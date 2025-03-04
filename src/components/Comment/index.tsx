@@ -1,19 +1,42 @@
-import { Avatar } from "../Avatar";
 import styles from "./styles.module.css";
+import { Avatar } from "../Avatar";
 import { ThumbsUp, Trash } from "@phosphor-icons/react";
+import { Comment as CommentProps } from "../../models/Comment";
+import { ptBR } from "date-fns/locale";
+import { format, formatDistanceToNow } from "date-fns";
 
-export const Comment = () => {
+export const Comment = ({
+  author,
+  publishedAt,
+  content,
+  likes,
+}: Omit<CommentProps, "id">) => {
+  const publishedDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    {
+      locale: ptBR,
+    }
+  );
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  });
+
   return (
     <div className={styles.comment}>
-      <Avatar hasBorder={false} src="https://github.com/diego3g.png" />
+      <Avatar hasBorder={false} src={author.avatarUrl} />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>
           <header>
             <div className={styles.authorAndTime}>
-              <strong>Diego Fernandes</strong>
-              <time title="11 de Maio às 08:13h" dateTime="2022-05-11 08:13:00">
-                Cerca de 1h atrás
+              <strong>{author.name}</strong>
+              <time
+                title={publishedDateFormatted}
+                dateTime={publishedAt.toISOString()}
+              >
+                {publishedDateRelativeToNow}
               </time>
             </div>
 
@@ -22,13 +45,13 @@ export const Comment = () => {
             </button>
           </header>
 
-          <p>Muito bom Devon, parabéns!! 👏👏</p>
+          <p>{content}</p>
         </div>
 
         <footer>
           <button>
             <ThumbsUp />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likes}</span>
           </button>
         </footer>
       </div>
