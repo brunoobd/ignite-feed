@@ -5,9 +5,10 @@ import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
 import { Post as PostProps } from "./models/Post";
 import { Post } from "./components/Post";
+import { useState } from "react";
 
 function App() {
-  const posts: PostProps[] = [
+  const [posts, setPosts] = useState<Array<PostProps>>([
     {
       id: "1",
       author: {
@@ -116,7 +117,22 @@ function App() {
         },
       ],
     },
-  ];
+  ]);
+
+  const deleteComment = (postId: string, commentId: string) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: post.comments.filter(
+                (comment) => comment.id !== commentId
+              ),
+            }
+          : post
+      )
+    );
+  };
 
   return (
     <>
@@ -129,10 +145,12 @@ function App() {
             ({ id, author, content, publishedAt, comments }: PostProps) => (
               <Post
                 key={id}
+                id={id}
                 author={author}
                 content={content}
                 publishedAt={publishedAt}
                 comments={comments}
+                onDeleteComment={deleteComment}
               />
             )
           )}

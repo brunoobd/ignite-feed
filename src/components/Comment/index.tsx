@@ -5,12 +5,18 @@ import { Comment as CommentProps } from "../../models/Comment";
 import { ptBR } from "date-fns/locale";
 import { format, formatDistanceToNow } from "date-fns";
 
+type Props = CommentProps & {
+  onDeleteComment: (commentId: CommentProps["id"]) => void;
+};
+
 export const Comment = ({
+  id,
   author,
   publishedAt,
   content,
   likes,
-}: Omit<CommentProps, "id">) => {
+  onDeleteComment,
+}: Props) => {
   const publishedDateFormatted = format(
     publishedAt,
     "d 'de' LLLL 'às' HH:mm'h'",
@@ -22,6 +28,8 @@ export const Comment = ({
     locale: ptBR,
     addSuffix: true,
   });
+
+  const handleDeleteComment = () => onDeleteComment(id);
 
   return (
     <div className={styles.comment}>
@@ -40,7 +48,7 @@ export const Comment = ({
               </time>
             </div>
 
-            <button title="Deletar comentário">
+            <button title="Deletar comentário" onClick={handleDeleteComment}>
               <Trash size={24} />
             </button>
           </header>

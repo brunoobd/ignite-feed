@@ -1,16 +1,31 @@
-import { format, formatDistanceToNow } from "date-fns";
-import { Post as PostProps } from "../../models/Post";
-import { Avatar } from "../Avatar";
-import { Comment } from "../Comment";
 import styles from "./styles.module.css";
+
+import { useState } from "react";
+
+import { Post as PostProps } from "../../models/Post";
+import { Comment as CommentProps } from "../../models/Comment";
+
+import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+import { Avatar } from "../Avatar";
+import { Comment } from "../Comment";
+
+type Props = PostProps & {
+  onDeleteComment: (
+    postId: PostProps["id"],
+    commentId: CommentProps["id"]
+  ) => void;
+};
+
 export const Post = ({
+  id,
   author,
   content,
   publishedAt,
   comments,
-}: Omit<PostProps, "id">) => {
+  onDeleteComment,
+}: Props) => {
   const { name, role, avatarUrl } = author;
   const publishedDateFormatted = format(
     publishedAt,
@@ -23,6 +38,9 @@ export const Post = ({
     locale: ptBR,
     addSuffix: true,
   });
+
+  const handleDeleteComment = (commentId: CommentProps["id"]) =>
+    onDeleteComment(id, commentId);
 
   return (
     <article className={styles.post}>
@@ -72,10 +90,12 @@ export const Post = ({
         {comments.map(({ id, author, content, publishedAt, likes }) => (
           <Comment
             key={id}
+            id={id}
             author={author}
             publishedAt={publishedAt}
             content={content}
             likes={likes}
+            onDeleteComment={handleDeleteComment}
           />
         ))}
       </div>
