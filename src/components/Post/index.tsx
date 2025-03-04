@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Post as PostProps } from "../../models/Post";
 import { Comment as CommentProps } from "../../models/Comment";
@@ -12,6 +12,7 @@ import { Avatar } from "../Avatar";
 import { Comment } from "../Comment";
 
 type Props = PostProps & {
+  onAddComment: (postId: PostProps["id"], commentContent: string) => void;
   onDeleteComment: (
     postId: PostProps["id"],
     commentId: CommentProps["id"]
@@ -24,8 +25,11 @@ export const Post = ({
   content,
   publishedAt,
   comments,
+  onAddComment,
   onDeleteComment,
 }: Props) => {
+  const [newComment, setNewComment] = useState("");
+  const newCommentInputRef = useRef<HTMLTextAreaElement>(null);
   const { name, role, avatarUrl } = author;
   const publishedDateFormatted = format(
     publishedAt,
@@ -38,6 +42,20 @@ export const Post = ({
     locale: ptBR,
     addSuffix: true,
   });
+
+  const handleNewCommentChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => setNewComment(event.target.value);
+
+  const handleCreateNewComment = () => {
+    event?.preventDefault();
+
+    onAddComment(id, newComment);
+
+    setNewComment("");
+
+    newCommentInputRef.current?.blur();
+  };
 
   const handleDeleteComment = (commentId: CommentProps["id"]) =>
     onDeleteComment(id, commentId);
@@ -79,10 +97,17 @@ export const Post = ({
       <form className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
-        <textarea placeholder="Deixe um comentário" />
+        <textarea
+          ref={newCommentInputRef}
+          placeholder="Deixe um comentário"
+          value={newComment}
+          onChange={handleNewCommentChange}
+        />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button type="submit" onClick={handleCreateNewComment}>
+            Publicar
+          </button>
         </footer>
       </form>
 

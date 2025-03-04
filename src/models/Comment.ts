@@ -1,8 +1,8 @@
-import { Author } from "./Author";
+import { User } from "./User";
 
 export type Comment = {
-  id: string;
-  author: Omit<Author, "role">;
+  id: number;
+  author: Omit<User, "role" | "coverUrl">;
   publishedAt: Date;
   content: string;
   likes: number;

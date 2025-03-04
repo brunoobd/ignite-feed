@@ -83,6 +83,11 @@
   margin-top: 1rem;
 }
 
+.commentForm textarea:focus {
+  outline: transparent;
+  box-shadow: 0 0 0 2px var(--green-500);
+}
+
 .commentForm footer {
   visibility: hidden;
   max-height: 0;

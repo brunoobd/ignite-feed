@@ -6,15 +6,19 @@ import { Header } from "./components/Header";
 import { Post as PostProps } from "./models/Post";
 import { Post } from "./components/Post";
 import { useState } from "react";
+import { User } from "./models/User";
+import { Comment } from "./models/Comment";
 
-function App() {
+const App = () => {
   const [posts, setPosts] = useState<Array<PostProps>>([
     {
-      id: "1",
+      id: 1,
       author: {
         name: "Bruno Silva",
         role: "Desenvolvedor Frontend",
         avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg",
+        coverUrl:
+          "https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=50",
       },
       content: [
         { type: "paragraph", content: "Fala, galera! 🚀" },
@@ -27,7 +31,7 @@ function App() {
       publishedAt: new Date("2024-03-03T14:00:00"),
       comments: [
         {
-          id: "101",
+          id: 101,
           author: {
             name: "João Pereira",
             avatarUrl: "https://randomuser.me/api/portraits/men/4.jpg",
@@ -37,7 +41,7 @@ function App() {
           likes: 3,
         },
         {
-          id: "102",
+          id: 102,
           author: {
             name: "Ana Souza",
             avatarUrl: "https://randomuser.me/api/portraits/women/5.jpg",
@@ -49,11 +53,13 @@ function App() {
       ],
     },
     {
-      id: "2",
+      id: 2,
       author: {
         name: "Mariana Costa",
         role: "UI/UX Designer",
         avatarUrl: "https://randomuser.me/api/portraits/women/2.jpg",
+        coverUrl:
+          "https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=50",
       },
       content: [
         {
@@ -69,7 +75,7 @@ function App() {
       publishedAt: new Date("2024-03-02T10:30:00"),
       comments: [
         {
-          id: "103",
+          id: 103,
           author: {
             name: "Lucas Almeida",
             avatarUrl: "https://randomuser.me/api/portraits/men/6.jpg",
@@ -81,11 +87,13 @@ function App() {
       ],
     },
     {
-      id: "3",
+      id: 3,
       author: {
         name: "Carlos Mendes",
         role: "Engenheiro de Software",
         avatarUrl: "https://randomuser.me/api/portraits/men/3.jpg",
+        coverUrl:
+          "https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=50",
       },
       content: [
         {
@@ -105,7 +113,7 @@ function App() {
       publishedAt: new Date("2024-03-01T18:45:00"),
       comments: [
         {
-          id: "104",
+          id: 104,
           author: {
             name: "Fernanda Lima",
 
@@ -118,8 +126,47 @@ function App() {
       ],
     },
   ]);
+  const currentUser: User = {
+    name: "Bruno Duarte",
+    role: "Associate Software Enginner",
+    avatarUrl: "https://github.com/brunoobd.png",
+    coverUrl:
+      "https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=50",
+  };
 
-  const deleteComment = (postId: string, commentId: string) => {
+  const addComment = (postId: PostProps["id"], commentContent: string) => {
+    const post = posts.find((post) => post.id === postId);
+
+    if (post) {
+      const commentsIds = post?.comments.map((comment) => comment.id);
+      const newCommentId = commentsIds.length
+        ? Math.max(...commentsIds) + 1
+        : 0;
+
+      setPosts((prevPosts) =>
+        prevPosts.map(
+          (post): PostProps =>
+            post.id === postId
+              ? {
+                  ...post,
+                  comments: [
+                    ...post.comments,
+                    {
+                      id: newCommentId,
+                      author: currentUser,
+                      content: commentContent,
+                      publishedAt: new Date(),
+                      likes: 0,
+                    },
+                  ],
+                }
+              : post
+        )
+      );
+    }
+  };
+
+  const deleteComment = (postId: PostProps["id"], commentId: Comment["id"]) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId
@@ -139,7 +186,8 @@ function App() {
       <Header />
 
       <div className={styles.wrapper}>
-        <Sidebar />
+        <Sidebar user={currentUser} />
+
         <main>
           {posts.map(
             ({ id, author, content, publishedAt, comments }: PostProps) => (
@@ -150,6 +198,7 @@ function App() {
                 content={content}
                 publishedAt={publishedAt}
                 comments={comments}
+                onAddComment={addComment}
                 onDeleteComment={deleteComment}
               />
             )
@@ -158,6 +207,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;
