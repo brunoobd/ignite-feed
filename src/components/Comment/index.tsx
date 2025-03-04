@@ -1,12 +1,16 @@
 import styles from "./styles.module.css";
-import { Avatar } from "../Avatar";
-import { ThumbsUp, Trash } from "@phosphor-icons/react";
-import { Comment as CommentProps } from "../../models/Comment";
+
 import { ptBR } from "date-fns/locale";
 import { format, formatDistanceToNow } from "date-fns";
 
-type Props = CommentProps & {
-  onDeleteComment: (commentId: CommentProps["id"]) => void;
+import { Comment as CommentType } from "../../models/Comment";
+
+import { ThumbsUp, Trash } from "@phosphor-icons/react";
+
+import { Avatar } from "../Avatar";
+
+type Props = CommentType & {
+  onDeleteComment: (commentId: CommentType["id"]) => void;
 };
 
 export const Comment = ({

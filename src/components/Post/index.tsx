@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 
-import { useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
 import { Post as PostProps } from "../../models/Post";
 import { Comment as CommentProps } from "../../models/Comment";
@@ -42,13 +42,20 @@ export const Post = ({
     locale: ptBR,
     addSuffix: true,
   });
+  const isNewCommentEmpty = newComment.length === 0;
 
   const handleNewCommentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => setNewComment(event.target.value);
+  ) => {
+    setNewComment(event.target.value);
+  };
 
-  const handleCreateNewComment = () => {
-    event?.preventDefault();
+  const handleNewCommentInvalid = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    event.target.setCustomValidity("Esse campo é obrigatório!");
+  };
+
+  const handleCreateNewComment = (event: FormEvent) => {
+    event.preventDefault();
 
     onAddComment(id, newComment);
 
@@ -57,8 +64,9 @@ export const Post = ({
     newCommentInputRef.current?.blur();
   };
 
-  const handleDeleteComment = (commentId: CommentProps["id"]) =>
+  const handleDeleteComment = (commentId: CommentProps["id"]) => {
     onDeleteComment(id, commentId);
+  };
 
   return (
     <article className={styles.post}>
@@ -102,10 +110,16 @@ export const Post = ({
           placeholder="Deixe um comentário"
           value={newComment}
           onChange={handleNewCommentChange}
+          onInvalid={handleNewCommentInvalid}
+          required
         />
 
         <footer>
-          <button type="submit" onClick={handleCreateNewComment}>
+          <button
+            type="submit"
+            onClick={handleCreateNewComment}
+            disabled={isNewCommentEmpty}
+          >
             Publicar
           </button>
         </footer>

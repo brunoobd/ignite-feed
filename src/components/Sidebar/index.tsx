@@ -1,7 +1,10 @@
-import { User } from "../../models/User";
-import { Avatar } from "../Avatar";
 import styles from "./styles.module.css";
+
+import { User } from "../../models/User";
+
 import { PencilLine } from "@phosphor-icons/react";
+
+import { Avatar } from "../Avatar";
 
 type Props = {
   user: User;

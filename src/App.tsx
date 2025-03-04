@@ -1,16 +1,18 @@
 import "./global.css";
 import styles from "./App.module.css";
 
-import { Sidebar } from "./components/Sidebar";
-import { Header } from "./components/Header";
-import { Post as PostProps } from "./models/Post";
-import { Post } from "./components/Post";
 import { useState } from "react";
+
 import { User } from "./models/User";
 import { Comment } from "./models/Comment";
+import { Post as PostType } from "./models/Post";
+
+import { Sidebar } from "./components/Sidebar";
+import { Header } from "./components/Header";
+import { Post } from "./components/Post";
 
 const App = () => {
-  const [posts, setPosts] = useState<Array<PostProps>>([
+  const [posts, setPosts] = useState<Array<PostType>>([
     {
       id: 1,
       author: {
@@ -134,39 +136,34 @@ const App = () => {
       "https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=50",
   };
 
-  const addComment = (postId: PostProps["id"], commentContent: string) => {
+  const addComment = (postId: PostType["id"], commentContent: string) => {
     const post = posts.find((post) => post.id === postId);
+    const commentsIds = post!.comments.map((comment) => comment.id);
+    const newCommentId = commentsIds.length ? Math.max(...commentsIds) + 1 : 0;
 
-    if (post) {
-      const commentsIds = post?.comments.map((comment) => comment.id);
-      const newCommentId = commentsIds.length
-        ? Math.max(...commentsIds) + 1
-        : 0;
-
-      setPosts((prevPosts) =>
-        prevPosts.map(
-          (post): PostProps =>
-            post.id === postId
-              ? {
-                  ...post,
-                  comments: [
-                    ...post.comments,
-                    {
-                      id: newCommentId,
-                      author: currentUser,
-                      content: commentContent,
-                      publishedAt: new Date(),
-                      likes: 0,
-                    },
-                  ],
-                }
-              : post
-        )
-      );
-    }
+    setPosts((prevPosts) =>
+      prevPosts.map(
+        (post): PostType =>
+          post.id === postId
+            ? {
+                ...post,
+                comments: [
+                  ...post.comments,
+                  {
+                    id: newCommentId,
+                    author: currentUser,
+                    content: commentContent,
+                    publishedAt: new Date(),
+                    likes: 0,
+                  },
+                ],
+              }
+            : post
+      )
+    );
   };
 
-  const deleteComment = (postId: PostProps["id"], commentId: Comment["id"]) => {
+  const deleteComment = (postId: PostType["id"], commentId: Comment["id"]) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId
@@ -190,7 +187,7 @@ const App = () => {
 
         <main>
           {posts.map(
-            ({ id, author, content, publishedAt, comments }: PostProps) => (
+            ({ id, author, content, publishedAt, comments }: PostType) => (
               <Post
                 key={id}
                 id={id}
