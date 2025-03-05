@@ -4,12 +4,14 @@ import { ptBR } from "date-fns/locale";
 import { format, formatDistanceToNow } from "date-fns";
 
 import { Comment as CommentType } from "../../models/Comment";
+import { User } from "../../models/User";
 
 import { ThumbsUp, Trash } from "@phosphor-icons/react";
 
 import { Avatar } from "../Avatar";
 
 type Props = CommentType & {
+  currentUser: User;
   onDeleteComment: (commentId: CommentType["id"]) => void;
   onAddCommentLike: (commentId: CommentType["id"]) => void;
 };
@@ -20,6 +22,7 @@ export const Comment = ({
   publishedAt,
   content,
   likes,
+  currentUser,
   onDeleteComment,
   onAddCommentLike,
 }: Props) => {
@@ -56,9 +59,11 @@ export const Comment = ({
               </time>
             </div>
 
-            <button title="Deletar comentário" onClick={handleDeleteComment}>
-              <Trash size={24} />
-            </button>
+            {currentUser.id === author.id && (
+              <button title="Deletar comentário" onClick={handleDeleteComment}>
+                <Trash size={24} />
+              </button>
+            )}
           </header>
 
           <p>{content}</p>

@@ -2,8 +2,9 @@ import styles from "./styles.module.css";
 
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
-import { Post as PostProps } from "../../models/Post";
+import { Post as PostType } from "../../models/Post";
 import { Comment as CommentType } from "../../models/Comment";
+import { User } from "../../models/User";
 
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -11,14 +12,15 @@ import { ptBR } from "date-fns/locale";
 import { Avatar } from "../Avatar";
 import { Comment } from "../Comment";
 
-type Props = PostProps & {
-  onAddComment: (postId: PostProps["id"], commentContent: string) => void;
+type Props = PostType & {
+  currentUser: User;
+  onAddComment: (postId: PostType["id"], commentContent: string) => void;
   onDeleteComment: (
-    postId: PostProps["id"],
+    postId: PostType["id"],
     commentId: CommentType["id"]
   ) => void;
   onAddCommentLike: (
-    postId: PostProps["id"],
+    postId: PostType["id"],
     commentId: CommentType["id"]
   ) => void;
 };
@@ -29,6 +31,7 @@ export const Post = ({
   content,
   publishedAt,
   comments,
+  currentUser,
   onAddComment,
   onDeleteComment,
   onAddCommentLike,
@@ -143,6 +146,7 @@ export const Post = ({
             publishedAt={publishedAt}
             content={content}
             likes={likes}
+            currentUser={currentUser}
             onDeleteComment={handleDeleteComment}
             onAddCommentLike={handleAddCommentLike}
           />

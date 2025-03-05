@@ -16,6 +16,7 @@ const App = () => {
     {
       id: 1,
       author: {
+        id: 2,
         name: "Bruno Silva",
         role: "Desenvolvedor Frontend",
         avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -35,6 +36,7 @@ const App = () => {
         {
           id: 101,
           author: {
+            id: 3,
             name: "João Pereira",
             avatarUrl: "https://randomuser.me/api/portraits/men/4.jpg",
           },
@@ -45,6 +47,7 @@ const App = () => {
         {
           id: 102,
           author: {
+            id: 4,
             name: "Ana Souza",
             avatarUrl: "https://randomuser.me/api/portraits/women/5.jpg",
           },
@@ -57,6 +60,7 @@ const App = () => {
     {
       id: 2,
       author: {
+        id: 5,
         name: "Mariana Costa",
         role: "UI/UX Designer",
         avatarUrl: "https://randomuser.me/api/portraits/women/2.jpg",
@@ -79,6 +83,7 @@ const App = () => {
         {
           id: 103,
           author: {
+            id: 6,
             name: "Lucas Almeida",
             avatarUrl: "https://randomuser.me/api/portraits/men/6.jpg",
           },
@@ -91,6 +96,7 @@ const App = () => {
     {
       id: 3,
       author: {
+        id: 7,
         name: "Carlos Mendes",
         role: "Engenheiro de Software",
         avatarUrl: "https://randomuser.me/api/portraits/men/3.jpg",
@@ -117,8 +123,8 @@ const App = () => {
         {
           id: 104,
           author: {
+            id: 8,
             name: "Fernanda Lima",
-
             avatarUrl: "https://randomuser.me/api/portraits/women/7.jpg",
           },
           publishedAt: new Date("2024-03-01T19:00:00"),
@@ -129,6 +135,7 @@ const App = () => {
     },
   ]);
   const currentUser: User = {
+    id: 1,
     name: "Bruno Duarte",
     role: "Associate Software Enginner",
     avatarUrl: "https://github.com/brunoobd.png",
@@ -215,6 +222,7 @@ const App = () => {
                 content={content}
                 publishedAt={publishedAt}
                 comments={comments}
+                currentUser={currentUser}
                 onAddComment={addComment}
                 onDeleteComment={deleteComment}
                 onAddCommentLike={addCommentLike}
