@@ -11,6 +11,7 @@ import { Avatar } from "../Avatar";
 
 type Props = CommentType & {
   onDeleteComment: (commentId: CommentType["id"]) => void;
+  onAddCommentLike: (commentId: CommentType["id"]) => void;
 };
 
 export const Comment = ({
@@ -20,6 +21,7 @@ export const Comment = ({
   content,
   likes,
   onDeleteComment,
+  onAddCommentLike,
 }: Props) => {
   const publishedDateFormatted = format(
     publishedAt,
@@ -34,6 +36,8 @@ export const Comment = ({
   });
 
   const handleDeleteComment = () => onDeleteComment(id);
+
+  const handleAddCommentLike = () => onAddCommentLike(id);
 
   return (
     <div className={styles.comment}>
@@ -61,7 +65,7 @@ export const Comment = ({
         </div>
 
         <footer>
-          <button>
+          <button onClick={handleAddCommentLike}>
             <ThumbsUp />
             Aplaudir <span>{likes}</span>
           </button>

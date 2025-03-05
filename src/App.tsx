@@ -178,6 +178,26 @@ const App = () => {
     );
   };
 
+  const addCommentLike = (postId: PostType["id"], commentId: Comment["id"]) => {
+    setPosts((prevPosts) =>
+      prevPosts.map(
+        (post): PostType =>
+          post.id === postId
+            ? {
+                ...post,
+                comments: post.comments.map((comment) => {
+                  if (comment.id === commentId) {
+                    return { ...comment, likes: comment.likes + 1 };
+                  }
+
+                  return comment;
+                }),
+              }
+            : post
+      )
+    );
+  };
+
   return (
     <>
       <Header />
@@ -197,6 +217,7 @@ const App = () => {
                 comments={comments}
                 onAddComment={addComment}
                 onDeleteComment={deleteComment}
+                onAddCommentLike={addCommentLike}
               />
             )
           )}

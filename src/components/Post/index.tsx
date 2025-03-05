@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
 import { Post as PostProps } from "../../models/Post";
-import { Comment as CommentProps } from "../../models/Comment";
+import { Comment as CommentType } from "../../models/Comment";
 
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -15,7 +15,11 @@ type Props = PostProps & {
   onAddComment: (postId: PostProps["id"], commentContent: string) => void;
   onDeleteComment: (
     postId: PostProps["id"],
-    commentId: CommentProps["id"]
+    commentId: CommentType["id"]
+  ) => void;
+  onAddCommentLike: (
+    postId: PostProps["id"],
+    commentId: CommentType["id"]
   ) => void;
 };
 
@@ -27,6 +31,7 @@ export const Post = ({
   comments,
   onAddComment,
   onDeleteComment,
+  onAddCommentLike,
 }: Props) => {
   const [newComment, setNewComment] = useState("");
   const newCommentInputRef = useRef<HTMLTextAreaElement>(null);
@@ -64,8 +69,12 @@ export const Post = ({
     newCommentInputRef.current?.blur();
   };
 
-  const handleDeleteComment = (commentId: CommentProps["id"]) => {
+  const handleDeleteComment = (commentId: CommentType["id"]) => {
     onDeleteComment(id, commentId);
+  };
+
+  const handleAddCommentLike = (commentId: CommentType["id"]) => {
+    onAddCommentLike(id, commentId);
   };
 
   return (
@@ -135,6 +144,7 @@ export const Post = ({
             content={content}
             likes={likes}
             onDeleteComment={handleDeleteComment}
+            onAddCommentLike={handleAddCommentLike}
           />
         ))}
       </div>
